@@ -30,6 +30,8 @@ build/
 !**/src/test/**/build/
 
 
-/.env/
+.env
+.env.local
+.env.*.local
 ### VS Code ###
 .vscode/
