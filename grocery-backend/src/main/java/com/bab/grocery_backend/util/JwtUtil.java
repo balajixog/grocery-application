@@ -28,7 +28,7 @@ public class JwtUtil {
                 secret.getBytes(StandardCharsets.UTF_8)
         );
     }
-    public String genrateToken(String email,String role){
+    public String generateToken(String email,String role){
       return  Jwts.builder()
            .subject(email)
            .claim("role",role)
