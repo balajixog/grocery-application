@@ -1,7 +1,6 @@
 package com.bab.grocery_backend.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +11,7 @@ import jakarta.validation.Valid;
 
 import com.bab.grocery_backend.dto.CreateProductRequestDto;
 import com.bab.grocery_backend.dto.ProductResponseDto;
+import com.bab.grocery_backend.dto.UpdateStockRequestDto;
 import com.bab.grocery_backend.service.ProductService;
 
 @RestController
@@ -29,9 +29,45 @@ public class ProductController {
         ProductResponseDto response = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
         @GetMapping
-        public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-            return ResponseEntity.ok(productService.getAllProducts());
-}
+        public ResponseEntity<Page<ProductResponseDto>> getAllProducts(
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "5") int size) {
+
+            return ResponseEntity.ok(productService.getAllProducts(page, size));
+        }
+        @GetMapping("/category/{categoryId}")
+        public ResponseEntity<Page<ProductResponseDto>> getProductsByCategory(
+        @PathVariable Long categoryId,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size) {
+
+        return ResponseEntity.ok(
+                productService.getProductsByCategory(categoryId, page, size)
+        );
+    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductResponseDto>> searchProducts(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return ResponseEntity.ok(
+                productService.searchProducts(keyword, page, size)
+        );
+    }
+    @PatchMapping("/{productId}/stock")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductResponseDto> updateStock(
+            @PathVariable Long productId,
+            @Valid @RequestBody UpdateStockRequestDto dto) {
+
+        return ResponseEntity.ok(
+                productService.updateStock(productId, dto)
+        );
+    }
+
+
+
+
 }
