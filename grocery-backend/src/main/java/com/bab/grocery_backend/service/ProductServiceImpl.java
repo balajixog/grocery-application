@@ -45,7 +45,8 @@ public class ProductServiceImpl implements ProductService {
                 saved.getDescription(),
                 saved.getPrice(),
                 saved.getStockQuantity(),
-                saved.getCategory().getName()
+                saved.getCategory().getName(),
+                saved.getStockQuantity() > 0
         );
     }
         @Override
@@ -60,7 +61,8 @@ public class ProductServiceImpl implements ProductService {
                         product.getDescription(),
                         product.getPrice(),
                         product.getStockQuantity(),
-                        product.getCategory().getName()
+                        product.getCategory().getName(),
+                        product.getStockQuantity() > 0
                 ));
         }
         @Override
@@ -75,7 +77,8 @@ public class ProductServiceImpl implements ProductService {
                     product.getDescription(),
                     product.getPrice(),
                     product.getStockQuantity(),
-                    product.getCategory().getName()
+                    product.getCategory().getName(),
+                    product.getStockQuantity() > 0
             ));
         }
         @Override
@@ -91,7 +94,8 @@ public class ProductServiceImpl implements ProductService {
                         product.getDescription(),
                         product.getPrice(),
                         product.getStockQuantity(),
-                        product.getCategory().getName()
+                        product.getCategory().getName(),
+                        product.getStockQuantity() > 0
                 ));
         }
 
@@ -111,7 +115,8 @@ public class ProductServiceImpl implements ProductService {
                 saved.getDescription(),
                 saved.getPrice(),
                 saved.getStockQuantity(),
-                saved.getCategory().getName()
+                saved.getCategory().getName(),
+                saved.getStockQuantity() > 0
         );
         }
 
