@@ -1,4 +1,4 @@
-package com.bab.grocery_backend.service;
+package com.bab.grocery_backend.service.impl;
 
 
 import org.springframework.data.domain.Page;
@@ -13,6 +13,7 @@ import com.bab.grocery_backend.entity.Category;
 import com.bab.grocery_backend.entity.Product;
 import com.bab.grocery_backend.repository.CategoryRepository;
 import com.bab.grocery_backend.repository.ProductRepository;
+import com.bab.grocery_backend.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 
