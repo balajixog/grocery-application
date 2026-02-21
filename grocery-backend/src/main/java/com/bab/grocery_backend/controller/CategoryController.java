@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bab.grocery_backend.dto.CategoryResponseDto;
-import com.bab.grocery_backend.dto.CreateCategoryRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.CreateCategoryRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.CategoryResponseDto;
 import com.bab.grocery_backend.service.CategoryService;
 
 import jakarta.validation.Valid;

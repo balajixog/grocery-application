@@ -1,4 +1,4 @@
-package com.bab.grocery_backend.dto;
+package com.bab.grocery_backend.dto.dtoResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

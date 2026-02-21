@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bab.grocery_backend.dto.AuthResponseDto;
-import com.bab.grocery_backend.dto.LoginRequestDto;
-import com.bab.grocery_backend.dto.RegisterRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.LoginRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.RegisterRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.AuthResponseDto;
 import com.bab.grocery_backend.entity.User;
 import com.bab.grocery_backend.repository.UserRepository;
 import com.bab.grocery_backend.service.UserService;

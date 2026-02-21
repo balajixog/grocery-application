@@ -1,4 +1,4 @@
-package com.bab.grocery_backend.dto;
+package com.bab.grocery_backend.dto.dtoRequest;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

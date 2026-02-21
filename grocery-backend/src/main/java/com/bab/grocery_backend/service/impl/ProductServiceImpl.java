@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bab.grocery_backend.dto.CreateProductRequestDto;
-import com.bab.grocery_backend.dto.ProductResponseDto;
-import com.bab.grocery_backend.dto.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.CreateProductRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.ProductResponseDto;
 import com.bab.grocery_backend.entity.Category;
 import com.bab.grocery_backend.entity.Product;
 import com.bab.grocery_backend.repository.CategoryRepository;
