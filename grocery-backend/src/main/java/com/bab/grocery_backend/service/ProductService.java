@@ -3,9 +3,9 @@ package com.bab.grocery_backend.service;
 
 import org.springframework.data.domain.Page;
 
-import com.bab.grocery_backend.dto.CreateProductRequestDto;
-import com.bab.grocery_backend.dto.ProductResponseDto;
-import com.bab.grocery_backend.dto.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.CreateProductRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.ProductResponseDto;
 
 public interface ProductService {
     ProductResponseDto createProduct(CreateProductRequestDto dto);

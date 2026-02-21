@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 
-import com.bab.grocery_backend.dto.CreateProductRequestDto;
-import com.bab.grocery_backend.dto.ProductResponseDto;
-import com.bab.grocery_backend.dto.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.CreateProductRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.UpdateStockRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.ProductResponseDto;
 import com.bab.grocery_backend.service.ProductService;
 
 @RestController
