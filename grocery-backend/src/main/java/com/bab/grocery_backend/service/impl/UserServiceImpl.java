@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        if (!user.getPhone().startsWith("+91")) {
+            user.setPhone("+91" + user.getPhone());
+        }
         return userRepository.save(user);
     }
     @Override
@@ -92,5 +95,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         passwordResetTokenRepository.delete(resetToken);
+
     }
 }

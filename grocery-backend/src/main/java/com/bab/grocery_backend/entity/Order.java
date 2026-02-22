@@ -40,4 +40,7 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    private String deliveryAddress;
+    private String deliveryPhone;
+
 }

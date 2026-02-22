@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.bab.grocery_backend.dto.dtoRequest.OrderHistoryResponseDto;
+import com.bab.grocery_backend.dto.dtoResponse.OrderTrackingResponseDto;
 import com.bab.grocery_backend.service.OrderService;
 
 @RestController
@@ -32,6 +33,12 @@ public class OrderController {
 
         String email = authentication.getName();
         return ResponseEntity.ok(orderService.getOrderHistory(email));
+    }
+    @GetMapping("/{orderId}/track")
+    public ResponseEntity<OrderTrackingResponseDto> trackOrder(
+            @PathVariable Long orderId) {
+
+        return ResponseEntity.ok(orderService.trackOrder(orderId));
     }
     
 }
