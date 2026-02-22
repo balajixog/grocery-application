@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bab.grocery_backend.dto.CartResponseDto;
 import com.bab.grocery_backend.dto.dtoRequest.AddToCartRequestDto;
 import com.bab.grocery_backend.dto.dtoRequest.UpdateCartItemRequestDto;
+import com.bab.grocery_backend.dto.dtoResponse.CartResponseDto;
 import com.bab.grocery_backend.service.CartService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("user/cart")
 @RequiredArgsConstructor
 public class CartController {
 
@@ -61,5 +61,5 @@ public class CartController {
         cartService.removeCartItem(productId, email);
 
         return ResponseEntity.ok("Item removed from cart");
-    }
+    }  
 }

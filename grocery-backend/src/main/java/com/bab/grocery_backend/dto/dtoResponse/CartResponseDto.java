@@ -1,6 +1,7 @@
-package com.bab.grocery_backend.dto;
+package com.bab.grocery_backend.dto.dtoResponse;
 
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
