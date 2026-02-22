@@ -15,4 +15,6 @@ public class RegisterRequestDto {
       message = "Password must be strong"
     )
     private String password;
+    @Pattern(regexp = "^[6-9][0-9]{9}$", message = "Invalid Indian phone number")
+    private String phone;
 }

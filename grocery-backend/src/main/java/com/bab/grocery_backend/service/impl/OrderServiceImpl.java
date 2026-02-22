@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.bab.grocery_backend.dto.OrderTrackingStepDto;
 import com.bab.grocery_backend.dto.dtoRequest.AdminOrderResponseDto;
 import com.bab.grocery_backend.dto.dtoRequest.OrderHistoryResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderDetailsResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderItemResponseDto;
+import com.bab.grocery_backend.dto.dtoResponse.OrderTrackingResponseDto;
 import com.bab.grocery_backend.entity.*;
 import com.bab.grocery_backend.repository.*;
 import com.bab.grocery_backend.service.OrderService;
@@ -209,5 +211,27 @@ public class OrderServiceImpl implements OrderService {
                 items
         );
         }
+        @Override
+        public OrderTrackingResponseDto trackOrder(Long orderId) {
 
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        String status = order.getStatus();
+
+        List<OrderTrackingStepDto> timeline = List.of(
+                new OrderTrackingStepDto("PLACED", true),
+                new OrderTrackingStepDto("SHIPPED", status.equals("SHIPPED") || status.equals("DELIVERED")),
+                new OrderTrackingStepDto("DELIVERED", status.equals("DELIVERED"))
+        );
+
+        if (status.equals("CANCELLED")) {
+                timeline = List.of(
+                        new OrderTrackingStepDto("PLACED", true),
+                        new OrderTrackingStepDto("CANCELLED", true)
+                );
+        }
+
+        return new OrderTrackingResponseDto(orderId, status, timeline);
+        }
 }

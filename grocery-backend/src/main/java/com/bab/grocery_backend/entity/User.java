@@ -1,5 +1,6 @@
 package com.bab.grocery_backend.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,7 @@ public class User {
     String email;
     String password;
     String role;
+    @Column(nullable = true)
+    private String phone;
 
 }

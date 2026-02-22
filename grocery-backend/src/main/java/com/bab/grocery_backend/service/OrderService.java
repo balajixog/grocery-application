@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import com.bab.grocery_backend.dto.dtoRequest.AdminOrderResponseDto;
 import com.bab.grocery_backend.dto.dtoRequest.OrderHistoryResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderDetailsResponseDto;
+import com.bab.grocery_backend.dto.dtoResponse.OrderTrackingResponseDto;
 
 public interface OrderService {
     void placeOrder(String userEmail);
@@ -15,4 +16,5 @@ public interface OrderService {
     void updateOrderStatus(Long orderId, String status);
     void cancelOrder(Long orderId);
     OrderDetailsResponseDto getOrderDetails(Long orderId);
+    OrderTrackingResponseDto trackOrder(Long orderId);
 }
