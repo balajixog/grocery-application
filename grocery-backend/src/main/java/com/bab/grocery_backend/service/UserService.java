@@ -10,5 +10,6 @@ public interface UserService {
     UserProfileResponseDto getProfile(String email);
     UserProfileResponseDto updateProfile(String email, UpdateProfileRequestDto dto);
     void deleteAccount(String email);
-
+    void forgotPassword(String email);
+    void resetPassword(String token, String newPassword);
 }
