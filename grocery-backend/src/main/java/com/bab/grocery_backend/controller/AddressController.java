@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.bab.grocery_backend.dto.dtoRequest.CreateAddressRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.UpdateAddressRequestDto;
 import com.bab.grocery_backend.dto.dtoResponse.AddressResponseDto;
 import com.bab.grocery_backend.service.AddressService;
 
@@ -46,4 +47,13 @@ public class AddressController {
         addressService.deleteAddress(id, email);
         return ResponseEntity.ok("Address deleted successfully");
     }
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponseDto> updateAddress(
+            @PathVariable Long id,
+            Authentication authentication,
+            @RequestBody UpdateAddressRequestDto dto) {
+
+        String email = authentication.getName();
+        return ResponseEntity.ok(addressService.updateAddress(id, email, dto));
+    }
+    }

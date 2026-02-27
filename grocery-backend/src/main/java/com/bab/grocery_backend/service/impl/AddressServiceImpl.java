@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.bab.grocery_backend.dto.dtoRequest.CreateAddressRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.UpdateAddressRequestDto;
 import com.bab.grocery_backend.dto.dtoResponse.AddressResponseDto;
 import com.bab.grocery_backend.entity.Address;
 import com.bab.grocery_backend.entity.User;
@@ -76,4 +77,30 @@ public class AddressServiceImpl implements AddressService {
 
         addressRepository.delete(address);
     }
+    @Override
+        public AddressResponseDto updateAddress(Long addressId, String email, UpdateAddressRequestDto dto) {
+
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+
+        if (!address.getUser().getEmail().equals(email)) {
+                throw new RuntimeException("Unauthorized");
+        }
+
+        address.setLine1(dto.getLine1());
+        address.setCity(dto.getCity());
+        address.setState(dto.getState());
+        address.setPincode(dto.getPincode());
+
+        Address updated = addressRepository.save(address);
+
+        return new AddressResponseDto(
+                updated.getId(),
+                updated.getLine1(),
+                updated.getCity(),
+                updated.getState(),
+                updated.getPincode()
+        );
+        }
 }
