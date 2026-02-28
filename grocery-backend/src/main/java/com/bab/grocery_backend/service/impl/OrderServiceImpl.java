@@ -1,6 +1,7 @@
 package com.bab.grocery_backend.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,18 +10,29 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.bab.grocery_backend.dto.OrderTrackingStepDto;
 import com.bab.grocery_backend.dto.dtoRequest.AdminOrderResponseDto;
 import com.bab.grocery_backend.dto.dtoRequest.OrderHistoryResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderDetailsResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderItemResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderTrackingResponseDto;
-import com.bab.grocery_backend.entity.*;
-import com.bab.grocery_backend.repository.*;
+import com.bab.grocery_backend.entity.Address;
+import com.bab.grocery_backend.entity.Cart;
+import com.bab.grocery_backend.entity.CartItem;
+import com.bab.grocery_backend.entity.Order;
+import com.bab.grocery_backend.entity.OrderItem;
+import com.bab.grocery_backend.entity.Product;
+import com.bab.grocery_backend.entity.User;
+import com.bab.grocery_backend.repository.AddressRepository;
+import com.bab.grocery_backend.repository.CartItemRepository;
+import com.bab.grocery_backend.repository.CartRepository;
+import com.bab.grocery_backend.repository.OrderItemRepository;
+import com.bab.grocery_backend.repository.OrderRepository;
+import com.bab.grocery_backend.repository.ProductRepository;
+import com.bab.grocery_backend.repository.UserRepository;
 import com.bab.grocery_backend.service.OrderService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,76 +44,91 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final AddressRepository addressRepository;
 
     @Override
-    @Transactional //If any step fails -> everything rolls back
-    public void placeOrder(String userEmail) {
+    @Transactional 
+        public void placeOrder(String userEmail, Long addressId) {
 
-        //  Get user
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Fetch selected address
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        // security check: address must belong to user
+        if (!address.getUser().getEmail().equals(userEmail)) {
+                throw new RuntimeException("Unauthorized address");
+        }
+
+        // build snapshot address string
+        String fullAddress = address.getLine1() + ", " +
+                address.getCity() + ", " +
+                address.getState() + " - " +
+                address.getPincode();
 
         //  Get cart
         Cart cart = cartRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Cart is empty"));
 
-        //  Get cart items
+        // Get cart items
         List<CartItem> cartItems = cartItemRepository.findAll()
                 .stream()
                 .filter(ci -> ci.getCart().getId().equals(cart.getId()))
                 .toList();
 
         if (cartItems.isEmpty()) {
-            throw new RuntimeException("Cart is empty");
+                throw new RuntimeException("Cart is empty");
         }
 
-        //  Validate stock & calculate total
+        // 5️⃣ Validate stock & calculate total
         double totalAmount = 0.0;
 
         for (CartItem cartItem : cartItems) {
-            Product product = cartItem.getProduct();
+                Product product = cartItem.getProduct();
 
-            if (product.getStockQuantity() < cartItem.getQuantity()) {
+                if (product.getStockQuantity() < cartItem.getQuantity()) {
                 throw new RuntimeException("Not enough stock for product: " + product.getName());
-            }
+                }
 
-            totalAmount += product.getPrice() * cartItem.getQuantity();
+                totalAmount += product.getPrice() * cartItem.getQuantity();
         }
 
-        //  Create Order
         Order order = Order.builder()
                 .user(user)
                 .totalAmount(totalAmount)
                 .status("PLACED")
                 .createdAt(LocalDateTime.now())
+                .deliveryAddress(fullAddress)   
+                .deliveryPhone(user.getPhone()) 
                 .build();
 
         Order savedOrder = orderRepository.save(order);
 
-        //  Convert CartItems → OrderItems + deduct stock
         for (CartItem cartItem : cartItems) {
 
-            Product product = cartItem.getProduct();
+                Product product = cartItem.getProduct();
 
-            // deduct stock
-            product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
-            productRepository.save(product);
+                // deduct stock
+                product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
+                productRepository.save(product);
 
-            // create order item
-            OrderItem orderItem = OrderItem.builder()
-                    .order(savedOrder)
-                    .product(product)
-                    .quantity(cartItem.getQuantity())
-                    .price(product.getPrice())
-                    .build();
+                // create order item
+                OrderItem orderItem = OrderItem.builder()
+                        .order(savedOrder)
+                        .product(product)
+                        .quantity(cartItem.getQuantity())
+                        .price(product.getPrice())
+                        .build();
 
-            orderItemRepository.save(orderItem);
+                orderItemRepository.save(orderItem);
         }
 
-        //  Clear cart
+        // 8️⃣ Clear cart
         cartItemRepository.deleteAll(cartItems);
-    }
-        // for history
+        }
+
         @Override
         public List<OrderHistoryResponseDto> getOrderHistory(String userEmail) {
 

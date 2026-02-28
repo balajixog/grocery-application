@@ -10,7 +10,7 @@ import com.bab.grocery_backend.dto.dtoResponse.OrderDetailsResponseDto;
 import com.bab.grocery_backend.dto.dtoResponse.OrderTrackingResponseDto;
 
 public interface OrderService {
-    void placeOrder(String userEmail);
+    void placeOrder(String email, Long addressId);
     List<OrderHistoryResponseDto> getOrderHistory(String userEmail);
     Page<AdminOrderResponseDto> getAllOrders(int page, int size, String sortBy, String direction);
     void updateOrderStatus(Long orderId, String status);
