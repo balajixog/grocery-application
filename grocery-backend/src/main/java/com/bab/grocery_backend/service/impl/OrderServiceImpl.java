@@ -82,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException("Cart is empty");
         }
 
-        // 5️⃣ Validate stock & calculate total
+        //  Validate stock & calculate total
         double totalAmount = 0.0;
 
         for (CartItem cartItem : cartItems) {
@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItemRepository.save(orderItem);
         }
 
-        // 8️⃣ Clear cart
+        //  Clear cart
         cartItemRepository.deleteAll(cartItems);
         }
 
