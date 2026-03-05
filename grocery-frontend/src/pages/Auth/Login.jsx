@@ -17,6 +17,7 @@ function Login() {
 
       localStorage.setItem("token", res.data.token);
       toast.success("Login successful!");
+      window.location.href = "/products";
     } catch (err) {
       toast.error("Login failed");
       console.error(err);
