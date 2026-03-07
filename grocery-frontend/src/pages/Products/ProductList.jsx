@@ -35,7 +35,7 @@ function ProductList() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200 p-8">
+    <div className="min-h-screen bg-linear-to-br from-green-100 via-white to-green-200 p-8">
       <Navbar/>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map((p) => (
