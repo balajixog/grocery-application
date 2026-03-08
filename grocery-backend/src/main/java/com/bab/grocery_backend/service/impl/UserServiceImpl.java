@@ -12,6 +12,7 @@ import com.bab.grocery_backend.entity.PasswordResetToken;
 import com.bab.grocery_backend.entity.User;
 import com.bab.grocery_backend.repository.PasswordResetTokenRepository;
 import com.bab.grocery_backend.repository.UserRepository;
+import com.bab.grocery_backend.service.EmailService;
 import com.bab.grocery_backend.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public User createUser(User user) {
@@ -75,9 +77,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         passwordResetTokenRepository.save(resetToken);
-
-        // In real app -> send email. For now, just log token.
-        System.out.println("RESET TOKEN: " + token);
+        emailService.sendPasswordResetEmail(user.getEmail(), token);
     }
 
     @Override
