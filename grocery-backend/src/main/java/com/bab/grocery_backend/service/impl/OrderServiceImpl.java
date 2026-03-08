@@ -1,6 +1,7 @@
 package com.bab.grocery_backend.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -240,25 +241,38 @@ public class OrderServiceImpl implements OrderService {
         }
         @Override
         public OrderTrackingResponseDto trackOrder(Long orderId) {
-
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        String status = order.getStatus();
-
-        List<OrderTrackingStepDto> timeline = List.of(
-                new OrderTrackingStepDto("PLACED", true),
-                new OrderTrackingStepDto("SHIPPED", status.equals("SHIPPED") || status.equals("DELIVERED")),
-                new OrderTrackingStepDto("DELIVERED", status.equals("DELIVERED"))
-        );
-
-        if (status.equals("CANCELLED")) {
-                timeline = List.of(
-                        new OrderTrackingStepDto("PLACED", true),
-                        new OrderTrackingStepDto("CANCELLED", true)
-                );
-        }
-
-        return new OrderTrackingResponseDto(orderId, status, timeline);
+        
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+        
+            String status = order.getStatus();
+        
+            List<OrderTrackingStepDto> timeline = new ArrayList<>();
+        
+            if ("CANCELLED".equals(status)) {
+        
+                timeline.add(new OrderTrackingStepDto("PLACED", true));
+                timeline.add(new OrderTrackingStepDto("CANCELLED", true));
+        
+            } else {
+        
+                timeline.add(new OrderTrackingStepDto("PLACED", true));
+        
+                timeline.add(new OrderTrackingStepDto(
+                        "SHIPPED",
+                        "SHIPPED".equals(status) || "DELIVERED".equals(status)
+                ));
+        
+                timeline.add(new OrderTrackingStepDto(
+                        "DELIVERED",
+                        "DELIVERED".equals(status)
+                ));
+            }
+        
+            return new OrderTrackingResponseDto(
+                    order.getId(),
+                    status,
+                    timeline
+            );
         }
 }

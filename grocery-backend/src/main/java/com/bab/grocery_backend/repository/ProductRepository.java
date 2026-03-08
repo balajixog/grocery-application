@@ -9,5 +9,9 @@ import com.bab.grocery_backend.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
     Page<Product> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
-
+    Page<Product> findByNameContainingIgnoreCaseAndCategoryId(
+            String name,
+            Long categoryId,
+            Pageable pageable
+    );
 }
