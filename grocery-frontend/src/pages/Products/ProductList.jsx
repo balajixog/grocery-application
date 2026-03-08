@@ -1,46 +1,152 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import toast from "react-hot-toast";
-import ProductCard from "../../components/ProductCard";
 import Navbar from "../../components/Navbar";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fetchProducts = async () => {
     try {
-      const res = await api.get("/products");
-      setProducts(res.data);
-    } catch (err) {
+      const res = await api.get("/products", {
+        params: {
+          search: search || undefined,
+          categoryId: category || undefined,
+          page: page,
+          size: 8,
+        },
+      });
+
+      setProducts(res.data.content);
+      setTotalPages(res.data.totalPages);
+    } catch {
       toast.error("Failed to load products");
-      console.error(err);
     }
   };
 
-  const addToCart = async (productId) => {
+  const fetchCategories = async () => {
     try {
-      await api.post("/user/cart/add", {
-        productId: productId,
-        quantity: 1,
-      });
-      toast.success("Added to cart 🛒");
-    } catch (err) {
-      toast.error("Failed to add to cart");
-      console.error(err);
+      const res = await api.get("/categories");
+
+      setCategories(res.data);
+    } catch {
+      toast.error("Failed to load categories");
     }
   };
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
+  useEffect(() => {
+    fetchProducts();
+  }, [search, category, page]);
+
+  const addToCart = async (productId) => {
+    try {
+      await api.post("/user/cart/add", {
+        productId,
+        quantity: 1,
+      });
+
+      toast.success("Added to cart");
+    } catch {
+      toast.error("Failed to add product");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-100 via-white to-green-200 p-8">
-      <Navbar/>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="min-h-screen bg-gray-100 p-8">
+      <Navbar />
+
+      <h1 className="text-3xl font-bold mt-20 mb-8">Products</h1>
+
+      {/* Search + Filter */}
+
+      <div className="flex gap-4 mb-8">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(0);
+          }}
+          className="border p-2 rounded w-full"
+        />
+
+        <select
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setPage(0);
+          }}
+          className="border p-2 rounded"
+        >
+          <option value="">All Categories</option>
+
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Product Grid */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((p) => (
-          <ProductCard key={p.id} product={p} addToCart={addToCart} />
+          <div
+            key={p.id}
+            className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
+          >
+            <h2 className="font-semibold text-lg">{p.name}</h2>
+
+            <p className="text-gray-600">₹ {p.price}</p>
+
+            <p className="text-sm text-gray-500">Stock: {p.stockQuantity}</p>
+
+            <button
+              onClick={() => addToCart(p.id)}
+              className="mt-3 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            >
+              Add to Cart
+            </button>
+          </div>
         ))}
+      </div>
+
+      {/* Pagination */}
+
+      <div className="flex justify-center mt-10 gap-4">
+        <button
+          disabled={page === 0}
+          onClick={() => setPage(page - 1)}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        <span className="font-semibold">
+          Page {page + 1} of {totalPages}
+        </span>
+
+        <button
+          disabled={page === totalPages - 1}
+          onClick={() => setPage(page + 1)}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
