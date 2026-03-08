@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bab.grocery_backend.dto.dtoRequest.ForgotPasswordRequestDto;
 import com.bab.grocery_backend.dto.dtoRequest.LoginRequestDto;
 import com.bab.grocery_backend.dto.dtoRequest.RegisterRequestDto;
+import com.bab.grocery_backend.dto.dtoRequest.ResetPasswordRequestDto;
 import com.bab.grocery_backend.dto.dtoResponse.AuthResponseDto;
 import com.bab.grocery_backend.entity.User;
 import com.bab.grocery_backend.repository.UserRepository;
@@ -70,5 +72,16 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getEmail(),user.getRole());
 
         return ResponseEntity.ok(new AuthResponseDto(token));
+     }
+        @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody  ForgotPasswordRequestDto dto) {
+        userService.forgotPassword(dto.getEmail());
+        return ResponseEntity.ok("Reset token generated (check logs)");
     }
+
+        @PostMapping("/reset-password")
+        public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequestDto dto) {
+                userService.resetPassword(dto.getToken(), dto.getNewPassword());
+                return ResponseEntity.ok("Password reset successful");
+        }
 }
