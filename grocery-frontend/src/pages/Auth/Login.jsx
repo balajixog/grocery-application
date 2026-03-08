@@ -1,14 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const res = await axios.post("http://localhost:8080/auth/login", {
         email,
@@ -16,49 +19,48 @@ function Login() {
       });
 
       localStorage.setItem("token", res.data.token);
-      toast.success("Login successful!");
-      window.location.href = "/products";
+
+      toast.success("Welcome back 👋");
+
+      navigate("/products");
     } catch (err) {
-      toast.error("Login failed");
-      console.error(err);
+      toast.error("Invalid credentials");
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
         onSubmit={handleLogin}
-        className="bg-white p-6 rounded-lg shadow-md w-80"
+        className="bg-white p-8 rounded-xl shadow w-96"
       >
-        <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-2 mb-3 border rounded"
+          className="w-full border p-3 rounded mb-4"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-2 mb-3 border rounded"
+          className="w-full border p-3 rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
-        <button className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+        <button className="w-full bg-green-600 text-white py-3 rounded">
           Login
         </button>
-        <p className="text-sm mt-3 text-center">
-          Create a new account?{" "}
-          <Link to="/register" className="text-green-600 underline">
-            Sign up
-          </Link>
-        </p>
+
+        <div className="mt-4 flex justify-between text-sm">
+          <Link to="/register">Register</Link>
+
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </div>
       </form>
     </div>
   );
