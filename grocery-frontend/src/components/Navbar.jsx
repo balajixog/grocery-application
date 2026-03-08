@@ -14,6 +14,12 @@ function Navbar() {
 
       <div className="flex gap-4">
         <Link
+          to="/orders"
+          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+        >
+          Orders
+        </Link>
+        <Link
           to="/cart"
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
         >

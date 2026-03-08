@@ -41,7 +41,7 @@ function CheckoutPage() {
     }
 
     try {
-      await api.post("/orders/place", {
+      await api.post("/user/orders/place", {
         addressId: selectedAddress,
       });
 
