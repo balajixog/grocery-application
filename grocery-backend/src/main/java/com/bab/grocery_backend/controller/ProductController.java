@@ -17,57 +17,32 @@ import com.bab.grocery_backend.service.ProductService;
 @RestController
 @RequestMapping("/admin/products")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class ProductController {
 
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDto> createProduct(
             @Valid @RequestBody CreateProductRequestDto dto) {
 
         ProductResponseDto response = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-        @GetMapping
-        public ResponseEntity<Page<ProductResponseDto>> getAllProducts(
-                @RequestParam(defaultValue = "0") int page,
-                @RequestParam(defaultValue = "5") int size) {
 
-            return ResponseEntity.ok(productService.getAllProducts(page, size));
-        }
-        @GetMapping("/category/{categoryId}")
-        public ResponseEntity<Page<ProductResponseDto>> getProductsByCategory(
-        @PathVariable Long categoryId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size) {
-
-        return ResponseEntity.ok(
-                productService.getProductsByCategory(categoryId, page, size)
-        );
-    }
-    @GetMapping("/search")
-    public ResponseEntity<Page<ProductResponseDto>> searchProducts(
-            @RequestParam String keyword,
+    @GetMapping
+    public ResponseEntity<Page<ProductResponseDto>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        return ResponseEntity.ok(
-                productService.searchProducts(keyword, page, size)
-        );
+        return ResponseEntity.ok(productService.getAllProducts(page, size));
     }
+
     @PatchMapping("/{productId}/stock")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDto> updateStock(
             @PathVariable Long productId,
             @Valid @RequestBody UpdateStockRequestDto dto) {
 
-        return ResponseEntity.ok(
-                productService.updateStock(productId, dto)
-        );
+        return ResponseEntity.ok(productService.updateStock(productId, dto));
     }
-
-
-
-
 }

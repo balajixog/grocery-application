@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import toast from "react-hot-toast";
 import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
+
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchCart = async () => {
     try {
@@ -128,7 +132,10 @@ function CartPage() {
           ))}
           <div className="flex justify-between items-center mt-6">
             <h2 className="text-xl font-bold">Total: ₹ {total}</h2>
-            <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+            <button
+              onClick={() => navigate("/checkout")}
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+            >
               Checkout
             </button>
           </div>

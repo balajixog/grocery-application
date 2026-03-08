@@ -19,11 +19,12 @@ import com.bab.grocery_backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("user/orders")
+@RequestMapping("/user/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
+
 
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(

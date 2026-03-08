@@ -13,6 +13,10 @@ public interface ProductService {
     Page<ProductResponseDto> getProductsByCategory(Long categoryId, int page, int size);
     Page<ProductResponseDto> searchProducts(String keyword, int page, int size);
     ProductResponseDto updateStock(Long productId, UpdateStockRequestDto dto);
-
+    public Page<ProductResponseDto> getFilteredProducts(String search,
+        Long categoryId,
+        int page,
+        int size);
+    
 
 }

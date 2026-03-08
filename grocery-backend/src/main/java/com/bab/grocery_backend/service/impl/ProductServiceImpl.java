@@ -120,6 +120,55 @@ public class ProductServiceImpl implements ProductService {
                 saved.getStockQuantity() > 0
         );
         }
+        @Override
+        public Page<ProductResponseDto> getFilteredProducts(
+                String search,
+                Long categoryId,
+                int page,
+                int size) {
+        
+            Pageable pageable = PageRequest.of(page, size);
+        
+            Page<Product> products;
+        
+            if (search != null && categoryId != null) {
+        
+                products = productRepository
+                        .findByNameContainingIgnoreCaseAndCategoryId(search, categoryId, pageable);
+        
+            } 
+            else if (search != null) {
+        
+                products = productRepository
+                        .findByNameContainingIgnoreCase(search, pageable);
+        
+            } 
+            else if (categoryId != null) {
+        
+                products = productRepository
+                        .findByCategoryId(categoryId, pageable);
+        
+            } 
+            else {
+        
+                products = productRepository.findAll(pageable);
+        
+            }
+        
+            return products.map(this::mapToDto);  // product -> mapToDto(product)
+        }
+        private ProductResponseDto mapToDto(Product product) {
+
+                return new ProductResponseDto(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getStockQuantity(),
+                        product.getCategory().getName(),
+                        product.getStockQuantity() > 0
+                );
+            }
 
 
 
