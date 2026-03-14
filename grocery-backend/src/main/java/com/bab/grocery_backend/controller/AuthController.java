@@ -71,7 +71,7 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(user.getEmail(),user.getRole());
 
-        return ResponseEntity.ok(new AuthResponseDto(token));
+        return ResponseEntity.ok(new AuthResponseDto(token,user.getRole()));
      }
         @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody  ForgotPasswordRequestDto dto) {

@@ -17,6 +17,6 @@ public interface ProductService {
         Long categoryId,
         int page,
         int size);
-    
+    void updateImage(Long productId, String imageUrl);
 
 }

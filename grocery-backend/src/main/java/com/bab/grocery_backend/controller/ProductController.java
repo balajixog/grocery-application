@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import com.bab.grocery_backend.dto.dtoRequest.CreateProductRequestDto;
 import com.bab.grocery_backend.dto.dtoRequest.UpdateStockRequestDto;
 import com.bab.grocery_backend.dto.dtoResponse.ProductResponseDto;
+import com.bab.grocery_backend.service.ImageService;
 import com.bab.grocery_backend.service.ProductService;
 
 @RestController
@@ -21,6 +23,7 @@ import com.bab.grocery_backend.service.ProductService;
 public class ProductController {
 
     private final ProductService productService;
+    private final ImageService imageService;
 
     @PostMapping
     public ResponseEntity<ProductResponseDto> createProduct(
@@ -44,5 +47,17 @@ public class ProductController {
             @Valid @RequestBody UpdateStockRequestDto dto) {
 
         return ResponseEntity.ok(productService.updateStock(productId, dto));
+    }
+
+    @PostMapping("/{productId}/image")
+    public ResponseEntity<?> uploadProductImage(
+            @PathVariable Long productId,
+            @RequestParam("file") MultipartFile file) {
+
+        String imageUrl = imageService.uploadImage(file);
+
+        productService.updateImage(productId, imageUrl);
+
+        return ResponseEntity.ok(imageUrl);
     }
 }

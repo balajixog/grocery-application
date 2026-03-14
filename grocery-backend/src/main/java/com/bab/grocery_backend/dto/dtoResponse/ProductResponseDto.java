@@ -14,4 +14,5 @@ public class ProductResponseDto {
     private Integer stockQuantity;
     private String categoryName;
     private boolean available;
+    private String imageUrl;
 }
