@@ -47,7 +47,8 @@ public class ProductServiceImpl implements ProductService {
                 saved.getPrice(),
                 saved.getStockQuantity(),
                 saved.getCategory().getName(),
-                saved.getStockQuantity() > 0
+                saved.getStockQuantity() > 0,
+                product.getImageUrl()
         );
     }
         @Override
@@ -63,7 +64,8 @@ public class ProductServiceImpl implements ProductService {
                         product.getPrice(),
                         product.getStockQuantity(),
                         product.getCategory().getName(),
-                        product.getStockQuantity() > 0
+                        product.getStockQuantity() > 0,
+                        product.getImageUrl()
                 ));
         }
         @Override
@@ -79,7 +81,8 @@ public class ProductServiceImpl implements ProductService {
                     product.getPrice(),
                     product.getStockQuantity(),
                     product.getCategory().getName(),
-                    product.getStockQuantity() > 0
+                    product.getStockQuantity() > 0,
+                    product.getImageUrl()
             ));
         }
         @Override
@@ -96,7 +99,8 @@ public class ProductServiceImpl implements ProductService {
                         product.getPrice(),
                         product.getStockQuantity(),
                         product.getCategory().getName(),
-                        product.getStockQuantity() > 0
+                        product.getStockQuantity() > 0,
+                        product.getImageUrl()
                 ));
         }
 
@@ -117,7 +121,8 @@ public class ProductServiceImpl implements ProductService {
                 saved.getPrice(),
                 saved.getStockQuantity(),
                 saved.getCategory().getName(),
-                saved.getStockQuantity() > 0
+                saved.getStockQuantity() > 0,
+                product.getImageUrl()
         );
         }
         @Override
@@ -166,11 +171,21 @@ public class ProductServiceImpl implements ProductService {
                         product.getPrice(),
                         product.getStockQuantity(),
                         product.getCategory().getName(),
-                        product.getStockQuantity() > 0
+                        product.getStockQuantity() > 0,
+                        product.getImageUrl()
                 );
             }
-
-
-
+        
+            @Override
+            public void updateImage(Long productId, String imageUrl) {
+            
+                Product product = productRepository.findById(productId)
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
+            
+                product.setImageUrl(imageUrl);
+            
+                productRepository.save(product);
+            }
+        
 
 }
