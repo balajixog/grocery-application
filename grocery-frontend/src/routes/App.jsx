@@ -8,8 +8,9 @@ import ResetPassword from "../pages/Auth/ResetPassword";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import AddressPage from "../pages/Address/AddressPage";
 import OrdersPage from "../pages/Orders/OrdersPage";
-import OrderDetailsPage from "../pages/Orders/OrderDetailsPage";
 import OrderTrackPage from "../pages/Orders/OrderTrackPage";
+import AdminRoute from "./AdminRoutes";
+import AdminProducts from "../pages/Admin/AdminProducts";
 
 function App() {
   return (
@@ -25,6 +26,13 @@ function App() {
         <Route path="/addresses" element={<AddressPage />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/orders/:id/track" element={<OrderTrackPage />} />
+        <Route path="/admin/products" 
+        element={
+            <AdminRoute>
+              <AdminProducts />
+            </AdminRoute>
+              }
+        />
       </Routes>
     </BrowserRouter>
   );
