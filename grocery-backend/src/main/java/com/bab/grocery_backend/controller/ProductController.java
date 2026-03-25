@@ -19,7 +19,7 @@ import com.bab.grocery_backend.service.ProductService;
 @RestController
 @RequestMapping("/admin/products")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')") // ✅ ONLY THIS IS ENOUGH
 public class ProductController {
 
     private final ProductService productService;
@@ -29,8 +29,9 @@ public class ProductController {
     public ResponseEntity<ProductResponseDto> createProduct(
             @Valid @RequestBody CreateProductRequestDto dto) {
 
-        ProductResponseDto response = productService.createProduct(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productService.createProduct(dto));
     }
 
     @GetMapping
@@ -49,15 +50,33 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateStock(productId, dto));
     }
 
-    @PostMapping("/{productId}/image")
-    public ResponseEntity<?> uploadProductImage(
-            @PathVariable Long productId,
+    @PostMapping("/{id}/image")
+    public ResponseEntity<?> uploadImage(
+            @PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
 
-        String imageUrl = imageService.uploadImage(file);
+        String url = imageService.uploadImage(file);
 
-        productService.updateImage(productId, imageUrl);
+        productService.updateImage(id, url);
 
-        return ResponseEntity.ok(imageUrl);
+        return ResponseEntity.ok(url);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponseDto> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody CreateProductRequestDto dto) {
+
+        return ResponseEntity.ok(
+                productService.updateProduct(productId, dto)
+        );
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+
+        productService.deleteProduct(productId);
+
+        return ResponseEntity.ok("Product deleted");
     }
 }

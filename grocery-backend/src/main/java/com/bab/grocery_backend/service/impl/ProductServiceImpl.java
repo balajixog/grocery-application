@@ -177,15 +177,43 @@ public class ProductServiceImpl implements ProductService {
             }
         
             @Override
-            public void updateImage(Long productId, String imageUrl) {
-            
+                public void updateImage(Long productId, String imageUrl) {
+
                 Product product = productRepository.findById(productId)
                         .orElseThrow(() -> new RuntimeException("Product not found"));
-            
+
                 product.setImageUrl(imageUrl);
-            
+
                 productRepository.save(product);
-            }
+        }
+        @Override
+        public ProductResponseDto updateProduct(Long id, CreateProductRequestDto dto) {
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStockQuantity(dto.getStockQuantity());
+        product.setCategory(category); 
+
+        productRepository.save(product);
+
+        return mapToDto(product);
+        }
+
+        @Override
+        public void deleteProduct(Long productId) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productRepository.delete(product);
+        }
         
 
 }

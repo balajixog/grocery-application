@@ -32,6 +32,7 @@ public class SecurityConfig {
                  .authorizeHttpRequests((auth)-> auth
                  .requestMatchers("/auth/**").permitAll()
                  .requestMatchers("/products/**").permitAll()
+                 .requestMatchers("/categories/**").permitAll()
                  .requestMatchers("/admin/**").hasRole("ADMIN")
                  .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                  .requestMatchers("/orders/**").hasAnyRole("USER", "ADMIN")
@@ -42,18 +43,23 @@ public class SecurityConfig {
                  
                 return http.build();
         }
+        
 
         @Bean
-        public CorsConfigurationSource corsConfigurationSource(){
-                CorsConfiguration configuration=new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("*"));   //replace with website url in the furture
-                configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
-                configuration.setAllowedHeaders(List.of("*"));
+        public CorsConfigurationSource corsConfigurationSource() {
 
-                UrlBasedCorsConfigurationSource source= new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**", configuration);
+        CorsConfiguration config = new CorsConfiguration();
 
-                return source;
+        config.setAllowedOrigins(List.of("http://localhost:5173")); 
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); 
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
         }
+        
     
 }

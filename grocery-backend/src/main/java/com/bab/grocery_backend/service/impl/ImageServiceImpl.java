@@ -22,15 +22,13 @@ public class ImageServiceImpl implements ImageService {
 
         try {
 
-            Map uploadResult = cloudinary.uploader()
+            Map result = cloudinary.uploader()
                     .upload(file.getBytes(), ObjectUtils.emptyMap());
 
-            return uploadResult.get("secure_url").toString();
+            return result.get("secure_url").toString();
 
         } catch (Exception e) {
-
-            throw new RuntimeException("Image upload failed");
-
+            throw new RuntimeException("Upload failed");
         }
     }
 }

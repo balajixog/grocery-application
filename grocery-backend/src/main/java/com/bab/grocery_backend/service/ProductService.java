@@ -18,5 +18,7 @@ public interface ProductService {
         int page,
         int size);
     void updateImage(Long productId, String imageUrl);
-
+    ProductResponseDto updateProduct(Long productId, CreateProductRequestDto dto);
+    void deleteProduct(Long productId);
+    
 }
