@@ -19,6 +19,7 @@ function Login() {
       });
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
 
       toast.success("Welcome back 👋");
 
