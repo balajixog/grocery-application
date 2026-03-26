@@ -11,6 +11,7 @@ import OrdersPage from "../pages/Orders/OrdersPage";
 import OrderTrackPage from "../pages/Orders/OrderTrackPage";
 import AdminRoute from "./AdminRoutes";
 import AdminProducts from "../pages/Admin/AdminProducts";
+import AdminCreateProduct from "../pages/Admin/AdminCreateProduct";
 
 function App() {
   return (
@@ -28,11 +29,12 @@ function App() {
         <Route path="/orders/:id/track" element={<OrderTrackPage />} />
         <Route path="/admin/products" 
         element={
-            <AdminRoute>
+          <AdminRoute>
               <AdminProducts />
             </AdminRoute>
               }
         />
+        <Route path="/admin/create-product" element={<AdminCreateProduct />} />;
       </Routes>
     </BrowserRouter>
   );
