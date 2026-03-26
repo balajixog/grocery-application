@@ -1,36 +1,29 @@
 function ProductCard({ product, addToCart }) {
-  const role = localStorage.getItem("role");
-
   return (
-    <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-xl shadow-lg hover:shadow-xl transition hover:-translate-y-1 overflow-hidden">
+    <div className="bg-white p-4 rounded-lg shadow">
+      {/* ✅ FIXED IMAGE */}
       <img
-        src={product.imageUrl || "https://via.placeholder.com/300"}
+        src={
+          product.imageUrl && product.imageUrl !== ""
+            ? product.imageUrl
+            : "https://dummyimage.com/300x200/cccccc/000000&text=No+Image"
+        }
         alt={product.name}
-        className="w-full h-40 object-cover"
+        className="w-full h-40 object-cover rounded"
       />
 
-      <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+      <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
 
-        <p className="text-green-600 font-bold text-xl mt-1">
-          ₹ {product.price}
-        </p>
+      <p className="text-green-600 font-bold">₹ {product.price}</p>
 
-        <p className="text-sm text-gray-500 mb-3">
-          Stock: {product.stockQuantity}
-        </p>
+      <p className="text-sm text-gray-500">Stock: {product.stockQuantity}</p>
 
-        {/* Upload image only for admin */}
-
-        {role === "ROLE_ADMIN" && <input type="file" className="mb-2" />}
-
-        <button
-          onClick={() => addToCart(product.id)}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition"
-        >
-          Add to Cart
-        </button>
-      </div>
+      <button
+        onClick={() => addToCart(product.id)}
+        className="mt-2 w-full bg-green-600 text-white py-2 rounded"
+      >
+        Add to Cart
+      </button>
     </div>
   );
 }
