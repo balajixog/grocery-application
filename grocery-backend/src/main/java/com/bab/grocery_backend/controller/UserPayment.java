@@ -21,24 +21,33 @@ public class UserPayment {
     @Value("${razor.api-secret}")
     private String secret;
     @PostMapping("/user/payment/create-order")
-        @PreAuthorize("hasAnyRole('USER','ADMIN')")
-        public ResponseEntity<?> createOrder(@RequestBody Map<String, Object> data) {
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
+public ResponseEntity<?> createOrder(@RequestBody Map<String, Object> data) {
 
-        try {
+    try {
+        System.out.println("Incoming Request: " + data);
 
-                int amount = Integer.parseInt(data.get("amount").toString());
+        int amount = Integer.parseInt(data.get("amount").toString());
+        System.out.println("Amount: " + amount);
 
-                RazorpayClient client = new RazorpayClient(key, secret);
+        System.out.println("KEY: " + key);
+        System.out.println("SECRET: " + secret);
 
-                JSONObject orderRequest = new JSONObject();
-                orderRequest.put("amount", amount * 100); // paise
-                orderRequest.put("currency", "INR");
-                com.razorpay.Order razorpayOrder = client.orders.create(orderRequest);
+        RazorpayClient client = new RazorpayClient(key, secret);
 
-                return ResponseEntity.ok(razorpayOrder.toString());
+        JSONObject orderRequest = new JSONObject();
+        orderRequest.put("amount", amount * 100);
+        orderRequest.put("currency", "INR");
 
-        } catch (Exception e) {
-                return ResponseEntity.status(500).body("Error");
-        }
-        }
+        com.razorpay.Order razorpayOrder = client.orders.create(orderRequest);
+
+        System.out.println("Order Created: " + razorpayOrder);
+
+        return ResponseEntity.ok(razorpayOrder.toString());
+
+    } catch (Exception e) {
+        e.printStackTrace(); 
+        return ResponseEntity.status(500).body(e.getMessage());
+    }
+}
 }
