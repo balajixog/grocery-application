@@ -10,6 +10,41 @@ function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
 
   const navigate = useNavigate();
+  const handlePayment = async (amount) => {
+    try {
+      const res = await api.post("/user/payment/create-order", {
+        amount: amount,
+      });
+
+      const order = res.data;
+
+      const options = {
+        key: "rzp_test_SaFbzsbWqklOXh",
+        amount: order.amount,
+        currency: "INR",
+        name: "Grocery Store",
+        description: "Order Payment",
+        order_id: order.id,
+
+        handler: function (response) {
+          toast.success("Payment Successful 🎉");
+
+          // 🔥 CALL ORDER API
+          placeOrder();
+        },
+
+        theme: {
+          color: "#16a34a",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed");
+    }
+  };
 
   // fetch addresses
   const fetchAddresses = async () => {
@@ -154,13 +189,19 @@ function CheckoutPage() {
           </div>
 
           {/* PLACE ORDER */}
-
           <button
+            onClick={() => handlePayment(total)}
+            className="bg-green-600 text-white px-6 py-2 rounded"
+          >
+            Pay Now
+          </button>
+
+          {/* <button
             onClick={placeOrder}
             className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
           >
             Place Order
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
